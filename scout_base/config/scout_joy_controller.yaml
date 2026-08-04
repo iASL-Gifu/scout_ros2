@@ -18,7 +18,7 @@ scout_joy_controller:
 
     # Joyボタン番号
     # manual_buttonを押している間だけ車両を操作できる
-    manual_button: 3
+    manual_button: 2
     # 速度上限をspeed_limit_step分だけ増減するボタン
     speed_plus_button: 5
     speed_minus_button: 4
@@ -26,7 +26,7 @@ scout_joy_controller:
     # Joy軸番号
     # speed_axes: 前後方向、angle_axes: 旋回方向
     speed_axes: 1
-    angle_axes: 0
+    angle_axes: 3
 
     # 入出力トピック
     joy_topic: /joy
