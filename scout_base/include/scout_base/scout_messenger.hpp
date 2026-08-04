@@ -211,29 +211,37 @@ class ScoutMessenger {
   void LightCmdCallback(const scout_msgs::msg::ScoutLightCmd::SharedPtr msg) {
     if (!simulated_robot_) {
       if (msg->cmd_ctrl_allowed) {
-        AgxLightMode f_mode;
-        uint8_t f_value;
+        auto convert_light_mode = [](uint8_t mode, AgxLightMode &agx_mode) {
+          switch (mode) {
+            case scout_msgs::msg::ScoutLightCmd::LIGHT_CONST_OFF:
+              agx_mode = AgxLightMode::CONST_OFF;
+              return true;
+            case scout_msgs::msg::ScoutLightCmd::LIGHT_CONST_ON:
+              agx_mode = AgxLightMode::CONST_ON;
+              return true;
+            case scout_msgs::msg::ScoutLightCmd::LIGHT_BREATH:
+              agx_mode = AgxLightMode::BREATH;
+              return true;
+            case scout_msgs::msg::ScoutLightCmd::LIGHT_CUSTOM:
+              agx_mode = AgxLightMode::CUSTOM;
+              return true;
+            default:
+              return false;
+          }
+        };
 
-        switch (msg->front_mode) {
-          case scout_msgs::msg::ScoutLightCmd::LIGHT_CONST_OFF: {
-            f_mode = AgxLightMode::CONST_OFF;
-            break;
-          }
-          case scout_msgs::msg::ScoutLightCmd::LIGHT_CONST_ON: {
-            f_mode = AgxLightMode::CONST_ON;
-            break;
-          }
-          case scout_msgs::msg::ScoutLightCmd::LIGHT_BREATH: {
-            f_mode = AgxLightMode::BREATH;
-            break;
-          }
-          case scout_msgs::msg::ScoutLightCmd::LIGHT_CUSTOM: {
-            f_mode = AgxLightMode::CUSTOM;
-            f_value = msg->front_custom_value;
-            break;
-          }
+        AgxLightMode front_mode;
+        AgxLightMode rear_mode;
+        if (!convert_light_mode(msg->front_mode, front_mode) ||
+            !convert_light_mode(msg->rear_mode, rear_mode)) {
+          RCLCPP_WARN(node_->get_logger(),
+                      "Ignoring invalid light mode (front: %u, rear: %u)",
+                      msg->front_mode, msg->rear_mode);
+          return;
         }
-        scout_->SetLightCommand(f_mode, f_value, AgxLightMode::CONST_ON, 0);
+
+        scout_->SetLightCommand(front_mode, msg->front_custom_value, rear_mode,
+                                msg->rear_custom_value);
       } else {
         scout_->DisableLightControl();
       }
