@@ -60,10 +60,13 @@ add_executable(scout_base_node
 target_link_libraries(scout_base_node ugv_sdk)
 ament_target_dependencies(scout_base_node rclcpp tf2 tf2_ros std_msgs nav_msgs sensor_msgs scout_msgs tf2_geometry_msgs)
 
-install(TARGETS scout_base_node
+add_executable(scout_joy_controller src/scout_joy_controller.cpp)
+ament_target_dependencies(scout_joy_controller rclcpp geometry_msgs sensor_msgs)
+
+install(TARGETS scout_base_node scout_joy_controller
   DESTINATION lib/${PROJECT_NAME})
 
-install(DIRECTORY launch
+install(DIRECTORY config launch
   DESTINATION share/${PROJECT_NAME}/)
   
 if(BUILD_TESTING)

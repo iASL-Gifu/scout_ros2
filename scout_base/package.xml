@@ -22,6 +22,9 @@
   <depend>ugv_sdk</depend>
   <depend>scout_msgs</depend>
 
+  <exec_depend>joy</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 

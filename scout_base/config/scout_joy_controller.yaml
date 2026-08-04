@@ -1,0 +1,40 @@
+scout_joy_controller:
+  ros__parameters:
+    # 並進速度の範囲 [m/s]
+    # max_speed: 1.6666 m/s = 約6 km/h
+    min_speed: 0.0
+    max_speed: 1.6666
+
+    # 旋回角速度（ステアリング角ではない）の範囲 [rad/s]
+    # ±0.5 rad/s = 約±28.6 deg/s
+    min_angle: -0.5
+    max_angle: 0.5
+
+    # Joy軸入力に掛けるゲイン（単位なし）
+    # ゲイン適用後の入力は -1.0～1.0 に制限される
+    # max_angle * normalizer = 1.0 になるように値を設定する
+    # 現在の設定: 0.5 * 2.0 = 1.0
+    normalizer: 2.0
+
+    # Joyボタン番号
+    # manual_buttonを押している間だけ車両を操作できる
+    manual_button: 3
+    # 速度上限をspeed_limit_step分だけ増減するボタン
+    speed_plus_button: 5
+    speed_minus_button: 4
+
+    # Joy軸番号
+    # speed_axes: 前後方向、angle_axes: 旋回方向
+    speed_axes: 1
+    angle_axes: 0
+
+    # 入出力トピック
+    joy_topic: /joy
+    cmd_vel_topic: /cmd_vel
+
+    # ボタンを1回押したときの速度上限の変更量（0.1 = 10%）
+    speed_limit_step: 0.1
+    # 起動時の速度上限（1.0 = 100%）
+    initial_speed_limit_factor: 1.0
+    # Joy受信が途絶えたと判断して停止するまでの時間 [s]
+    joy_timeout: 0.5
