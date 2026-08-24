@@ -18,7 +18,7 @@ scout_joy_controller:
 
     # Joyボタン番号
     # manual_buttonを押している間だけ車両を操作できる
-    manual_button: 2
+    manual_button: 3
     # 速度上限をspeed_limit_step分だけ増減するボタン
     speed_plus_button: 5
     speed_minus_button: 4
