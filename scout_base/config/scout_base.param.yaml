@@ -1,0 +1,4 @@
+scout:
+  ros__parameters:
+    # Publish odom -> base_link TF for standalone ROS use.
+    publish_odom_tf: true

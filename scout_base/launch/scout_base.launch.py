@@ -7,6 +7,9 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, ExecuteProcess
 from launch.substitutions import LaunchConfiguration, Command
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterFile
+from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import PathJoinSubstitution
 
 
 def generate_launch_description():
@@ -21,6 +24,12 @@ def generate_launch_description():
                                                 description='Base link frame id')
     odom_topic_arg = DeclareLaunchArgument('odom_topic_name', default_value='odom',
                                            description='Odometry topic name')
+    parameter_file_arg = DeclareLaunchArgument(
+        'parameter_file',
+        default_value=PathJoinSubstitution([
+            FindPackageShare('scout_base'), 'config', 'scout_base.param.yaml'
+        ]),
+        description='Scout base parameter file')
 
     is_scout_mini_arg = DeclareLaunchArgument('is_scout_mini', default_value='false',
                                           description='Scout mini model')
@@ -37,7 +46,7 @@ def generate_launch_description():
         executable='scout_base_node',
         output='screen',
         emulate_tty=True,
-        parameters=[{
+        parameters=[ParameterFile(LaunchConfiguration('parameter_file')), {
                 'use_sim_time': launch.substitutions.LaunchConfiguration('use_sim_time'),
                 'port_name': launch.substitutions.LaunchConfiguration('port_name'),                
                 'odom_frame': launch.substitutions.LaunchConfiguration('odom_frame'),
@@ -55,6 +64,7 @@ def generate_launch_description():
         odom_frame_arg,
         base_link_frame_arg,
         odom_topic_arg,
+        parameter_file_arg,
         is_scout_mini_arg,
         is_omni_wheel_arg,
         simulated_robot_arg,
